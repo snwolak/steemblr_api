@@ -5,17 +5,26 @@ const app = (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   const ip = requestIp.getClientIp(req);
   if (ip === '') {   
-    const docRef = db.collection('posts').doc(req.body.permlink);
+    const docRef = db.collection('posts').doc(req.body.post.permlink);
     
     docRef
       .get()
       .then(doc => {
         if (doc.exists) {
-          docRef.set(req.body, { merge: true});
-          res.end();
-          return void 0;
+          const post = doc.data()
+          if(post.trending === true) {
+            docRef.set(req.body.post, { merge: true});
+            res.end();
+            return void 0;
+          } else {
+            docRef.set(req.body.post, { merge: true});
+            docRef.set({trending: req.body.trending > 0.80 ? true : false}, {merge: true})
+            res.end();
+            return void 0;
+          }
+          
         } else {
-          console.log('No such document', req.body.permlink);
+          console.log('No such document', req.body.post.permlink);
           res.end();
           return void 0;
         }
