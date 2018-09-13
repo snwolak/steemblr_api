@@ -4,6 +4,7 @@ const requestIp = require('request-ip');
 const app = (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   const ip = requestIp.getClientIp(req);
+  
   if (ip === '') {   
     const docRef = db.collection('posts').doc(req.body.post.permlink);
     
@@ -17,8 +18,9 @@ const app = (req, res) => {
             res.end();
             return void 0;
           } else {
+            console.log("Trending:", req.body.post.rating, req.body.post.rating > 0.80 ? true : false)
             docRef.set(req.body.post, { merge: true});
-            docRef.set({trending: req.body.trending > 0.80 ? true : false}, {merge: true})
+            docRef.set({trending: req.body.post.rating > 0.80 ? true : false}, {merge: true})
             res.end();
             return void 0;
           }
