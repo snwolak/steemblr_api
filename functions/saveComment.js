@@ -1,24 +1,18 @@
-const settings = require('./settings')
-const cors = require('cors')({origin: settings.origin,  optionsSuccessStatus: 200});
 const defaultApp = require('./defaultApp')
 const db = defaultApp.app.firestore();
 
-db.settings(settings);
-
-const app = (req, res) => {
-  cors(req, res, () => { 
-  const data = req.body
+const app = (data, context) => {
   console.log(data)
-  const docRef = db.collection('posts').doc(req.body.permlink)
+  const docRef = db.collection('posts').doc(data.permlink)
   const checkToken = defaultApp.app.auth().verifyIdToken(data.token)
   .then((decodedToken) => {
     const uid = decodedToken.uid;
-    if(decodedToken.name === data.username) {
+    if(uid === data.uid) {
       return true
     } else {
       return false;
     }
-  })
+  }).catch(err => console.log(err))
   if(checkToken) {
     const comment = [
       {
@@ -37,10 +31,9 @@ const app = (req, res) => {
       return docRef.update({comments: comments, actions: actions})
     }).catch(err => console.log(err))
     
-    res.status(200).send('OK');
-    res.end()
+    
   }
-  })
+  
 };
 module.exports = {
   app

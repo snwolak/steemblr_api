@@ -1,15 +1,13 @@
-const settings = require('./settings')
-const cors = require('cors')({origin: settings,  optionsSuccessStatus: 200});
 const defaultApp = require('./defaultApp')
 const db = defaultApp.app.firestore();
-const app = (req, res) => {
-  cors(req, res, () => { 
-  const data = JSON.parse(req.body)
+const app = (data, context) => {
+ 
+  
   const docRef = db.collection('users').doc(data.username).collection("blog").doc("layout");
   const checkToken = defaultApp.app.auth().verifyIdToken(data.token)
   .then((decodedToken) => {
     const uid = decodedToken.uid;
-    if(decodedToken.name === data.username) {
+    if(uid === data.uid) {
      
       return true
     }
@@ -22,9 +20,9 @@ const app = (req, res) => {
   const p = Promise.all([checkToken]).then(res => {
     return res;
   })
-  res.status(200).send('success');
-  return p, res.end()
-  })
+  
+  return p
+  
 };
 
 module.exports = {
