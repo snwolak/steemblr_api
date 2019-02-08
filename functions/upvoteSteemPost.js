@@ -17,11 +17,11 @@ const app = (data, context) => {
     if(data.weight === 0) {
       //weight 0 means user is unvoting the post
       return docRef.get().then(res => res.data()).then(res => {
-        const filtered = res.upvotes.filter(vote => {
+        const filtered = res.active_votes.filter(vote => {
           return vote.voter !== data.voter
         })
-        const upvotes = res.upvotes !== undefined ? filtered : []
-        return docRef.update({upvotes: upvotes})
+        const votes = res.active_votes !== undefined ? filtered : []
+        return docRef.update({active_votes: votes})
       }).catch(err => console.log(err))
     } else if(data.weight > 0) {
       //upvoting the post
@@ -31,17 +31,16 @@ const app = (data, context) => {
           id: data.id,
           voter: data.voter,
           uid: data.uid,
-          platform: data.platform,
           weight: data.weight
         }
       ]
       return docRef.get().then(res => res.data()).then(res => {
-        const find = res.upvotes.find(obj => obj.uid === data.uid)
+        const find = res.active_votes.find(obj => obj.uid === data.uid)
         if(find) {
           return void 0
         }
-        const upvotes = res.upvotes !== undefined ? vote.concat(res.upvotes) : vote
-        return docRef.update({upvotes: upvotes})
+        const votes = res.active_votes !== undefined ? vote.concat(res.active_votes) : vote
+        return docRef.update({active_votes: votes})
       }).catch(err => console.log(err))
     }  
   }
