@@ -16,15 +16,19 @@ const app = (data, context) => {
   }).catch((error) => {
     // Handle error
   });
-  if(checkToken)
-  docRef.set({ isNSFWAllowed: false, owner: data.uid, platform: "email" }).then(res => { return res})
-  .catch((error) => {
-    console.error("Error writing document: ", error);
-  });
-  docRef.collection('blog').doc('layout').set(blog.layout({displayName: data.displayName}), { merge: true}).then(res => { return res})
-  .catch((error) => {
-    console.error("Error writing document: ", error);
-  });
+  if(checkToken){ 
+    const profile = docRef.set({ isNSFWAllowed: false, owner: data.uid, platform: "email" }).then(res => { return res})
+    .catch((error) => {
+      console.error("Error writing document: ", error);
+    });
+    const layout = docRef.collection('blog').doc('layout').set(blog.layout({displayName: data.displayName}), { merge: true}).then(res => { return res})
+    .catch((error) => {
+      console.error("Error writing document: ", error);
+    });
+    return Promise.all([profile, layout]).then(values => values)
+    
+  }
+  
  
 };
 

@@ -17,15 +17,15 @@ const app = (data, context) => {
   });
   if(checkToken) {
     console.log(data)
-    docRef.set({ isNSFWAllowed: false, owner: data.steemAccount, platform: "steem" }).then(res => { return res})
+    const profile = docRef.set({ isNSFWAllowed: false, owner: data.steemAccount, platform: "steem" }).then(res => { return res})
     .catch((error) => {
       console.error("Error writing document: ", error);
     });
-    docRef.collection('blog').doc('layout').set(data.blog, { merge: true}).then(res => { return res})
+    const layout = docRef.collection('blog').doc('layout').set(data.blog, { merge: true}).then(res => { return res})
     .catch((error) => {
       console.error("Error writing document: ", error);
     });
-  
+    return Promise.all([profile, layout]).then(values => values)
   }
   
  
