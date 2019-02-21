@@ -17,7 +17,7 @@ const app = (data, context) => {
     // Handle error
   });
   if(checkToken){ 
-    const profile = docRef.set({ isNSFWAllowed: false, owner: data.uid, platform: "email" }).then(res => { return res})
+    const profile = docRef.set({ isNSFWAllowed: false, owner: data.uid, platform: "email", following: []}).then(res => { return res})
     .catch((error) => {
       console.error("Error writing document: ", error);
     });

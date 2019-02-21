@@ -17,7 +17,7 @@ const app = (data, context) => {
   });
   if(checkToken) {
     console.log(data)
-    const profile = docRef.set({ isNSFWAllowed: false, owner: data.steemAccount, platform: "steem" }).then(res => { return res})
+    const profile = docRef.set({ isNSFWAllowed: false, owner: data.steemAccount, platform: "steem", following: [] }).then(res => { return res})
     .catch((error) => {
       console.error("Error writing document: ", error);
     });
