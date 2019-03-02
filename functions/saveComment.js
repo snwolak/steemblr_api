@@ -25,10 +25,9 @@ const app = (data, context) => {
         isReply: data.isReply,
         replyTo: data.replyTo
       }]
-    docRef.get().then(res => res.data()).then(res => {
+    return docRef.get().then(res => res.data()).then(res => {
       const comments = res.comments !== undefined ? comment.concat(res.comments) : comment
-      const actions = res.actions !== undefined ? res.actions + 1 : 1
-      return docRef.update({comments: comments, actions: actions})
+      return docRef.update({comments: comments})
     }).catch(err => console.log(err))
     
     
