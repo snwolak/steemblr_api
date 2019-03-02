@@ -11,7 +11,7 @@ const upvotePost = require('./upvotePost')
 const follow = require('./follow')
 const upvoteSteemPost = require('./upvoteSteemPost')
 
-exports.reciveToken = functions.https.onRequest(reciveToken.app);
+exports.reciveToken = functions.https.onCall(reciveToken.app);
 exports.deletePost = functions.https.onRequest(deletePost.app);
 exports.createProfile = functions.https.onCall(createProfile.app);
 exports.createProfileSteem = functions.https.onCall(createProfileSteem.app);
