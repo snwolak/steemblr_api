@@ -27,9 +27,11 @@ const app = (data, context) => {
       //upvoting the post
       const vote = [
         { 
+          action: "upvote",
           timestamp: new Date(),
           id: data.id,
           voter: data.voter,
+          username: data.voter,
           uid: data.uid,
           platform: data.platform,
           weight: data.weight

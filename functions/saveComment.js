@@ -16,10 +16,12 @@ const app = (data, context) => {
   if(checkToken) {
     const comment = [
       {
+        action: "comment",
         id: data.id, 
         permlink: data.id,
         body: data.comment, 
         author: data.username, 
+        username: data.username,
         platform: data.platform,
         timestamp: Date.now(),
         isReply: data.isReply,
